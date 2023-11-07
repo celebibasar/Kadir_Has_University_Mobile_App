@@ -12,9 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentContainerView
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.basarcelebi.khas_app.ui.theme.Khas_appTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -23,12 +28,15 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize().background(Color.Transparent)
                 ) {
-                    MainScreen()
+
+
+                    MainScreen() // This line now calls the MainScreen function after the navController variable has been initialized
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
