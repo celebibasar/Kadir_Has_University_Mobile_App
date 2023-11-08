@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.basarcelebi.khas_app.ui.theme.Khas_appTheme
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : ComponentActivity() {
 
@@ -26,11 +27,12 @@ class MainActivity : ComponentActivity() {
             Khas_appTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize().background(Color.Transparent)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Transparent)
                 ) {
+                    KhasApp()
 
-
-                    MainScreen() // This line now calls the MainScreen function after the navController variable has been initialized
                 }
             }
         }
@@ -38,18 +40,3 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Khas_appTheme {
-        Greeting("Android")
-    }
-}

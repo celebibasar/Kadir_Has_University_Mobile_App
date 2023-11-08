@@ -20,4 +20,9 @@
         android:name="com.basarcelebi.khas_app.NewsFragment"
         android:label="fragment_news"
         tools:layout="@layout/fragment_news" />
+    <fragment
+        android:id="@+id/mainFragment2"
+        android:name="com.basarcelebi.khas_app.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" />
 </navigation>
