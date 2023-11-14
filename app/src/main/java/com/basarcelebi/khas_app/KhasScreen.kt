@@ -1,8 +1,8 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.basarcelebi.khas_app
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -59,7 +58,6 @@ fun KhasAppBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KhasApp(navController: NavHostController = rememberNavController()) {
     // Get current back stack entry
@@ -87,7 +85,6 @@ fun KhasApp(navController: NavHostController = rememberNavController()) {
         ) {
             composable(route = KhasScreen.Start.name) {
                 MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Entree.name)})
-
             }
             composable(route = KhasScreen.Entree.name) {
                 val context = LocalContext.current
