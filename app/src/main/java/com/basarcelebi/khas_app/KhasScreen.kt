@@ -58,6 +58,7 @@ fun KhasAppBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KhasApp(navController: NavHostController = rememberNavController()) {
     // Get current back stack entry
