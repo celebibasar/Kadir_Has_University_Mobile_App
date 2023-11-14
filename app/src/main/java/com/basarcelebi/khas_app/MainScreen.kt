@@ -68,40 +68,34 @@ fun MainScreen(onNextButtonClicked: () -> Unit)
             .fillMaxWidth()
             .padding(10.dp)
             .size(75.dp)) {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Button(onClick = onNextButtonClicked, modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    ,colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                )
-                ){
+            Card(modifier = Modifier.fillMaxWidth(), onClick = onNextButtonClicked) {
+                Row{
                     Column(modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        ) {
+                        .clip(RoundedCornerShape(10.dp)).padding(5.dp)
+                    ) {
                         Image(painter = painterResource(id = R.drawable.basar_celebi), contentDescription = null, modifier = Modifier.clip(
                             CircleShape))
                     }
-                    Column(modifier = Modifier.padding(start = 12.dp, top=3.dp)) {
+                    Column(modifier = Modifier.padding(top=6.dp)) {
                         Row {
-                            Text(text = "Başar Çelebi", fontSize = 16.sp, color = Color.Black)
+                            Text(text = "Başar Çelebi", fontSize = 16.sp)
 
                         }
-                        Spacer(modifier = Modifier.height(1.dp))
+                        Spacer(modifier = Modifier.height(3.dp))
                         Row {
-                            Text(text = "Computer Engineering", fontSize = 12.sp, color = Color.Black)
+                            Text(text = "Computer Engineering", fontSize = 12.sp)
 
                         }
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                         Row {
                             Column {
-                                Text(text = "5. Semester", fontSize = 9.sp, color = Color.Black)
+                                Text(text = "5. Semester", fontSize = 9.sp)
 
                             }
                             Spacer(modifier = Modifier.weight(1f))
                             Column(modifier = Modifier.padding(end = 8.dp)) {
 
-                                Text(text = "GNO: 3,27", fontSize = 9.sp, color = Color.Black)
+                                Text(text = "GNO: 3,27", fontSize = 9.sp)
 
                             }
 
@@ -111,9 +105,12 @@ fun MainScreen(onNextButtonClicked: () -> Unit)
 
                     }
 
-
-
                 }
+
+
+
+
+
 
 
 
@@ -122,7 +119,7 @@ fun MainScreen(onNextButtonClicked: () -> Unit)
 
         }
         Column(modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(Color.Transparent)) {
             Row(modifier = Modifier
                 .fillMaxWidth()
