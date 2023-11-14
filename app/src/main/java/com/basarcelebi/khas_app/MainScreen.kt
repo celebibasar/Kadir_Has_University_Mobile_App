@@ -1,6 +1,7 @@
 package com.basarcelebi.khas_app
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.expandVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -29,9 +32,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,8 +44,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.Navigation
+import com.basarcelebi.khas_app.data.SubjectData
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(onNextButtonClicked: () -> Unit)
 {
@@ -93,6 +100,7 @@ fun MainScreen(onNextButtonClicked: () -> Unit)
                             }
                             Spacer(modifier = Modifier.weight(1f))
                             Column(modifier = Modifier.padding(end = 8.dp)) {
+
                                 Text(text = "GNO: 3,27", fontSize = 9.sp, color = Color.Black)
 
                             }
@@ -116,6 +124,62 @@ fun MainScreen(onNextButtonClicked: () -> Unit)
         Column(modifier = Modifier
             .fillMaxSize()
             .background(Color.Transparent)) {
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Transparent)
+                .padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                Text(text = "Bugünkü Ders Programın", fontSize = 18.sp)
+
+            }
+            val lazyItems = SubjectData.SubjectDatas()
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(5.dp)){
+                items(SubjectData.SubjectDatas().size){index ->
+                    SubjectData.SubjectDatas()
+                    Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(32.dp)
+                        .padding(start = 10.dp, end = 10.dp)
+                        ,onClick = onNextButtonClicked
+                    ) {
+
+                        Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+
+                            Column {
+                                Row(
+                                    modifier = Modifier.padding(start = 5.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    val subjectName = lazyItems[index].subjectName
+                                    Text(text = "$subjectName")
+                                }
+
+                            }
+                            Column(modifier = Modifier.padding(end = 12.dp)) {
+                                Row(
+                                    modifier = Modifier.padding(start = 5.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    val subjectTime = lazyItems[index].time
+                                    Text(text = "$subjectTime")
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+
+        }
+        Column(modifier = Modifier.fillMaxSize()) {
 
         }
 
@@ -132,4 +196,8 @@ fun MainScreen(onNextButtonClicked: () -> Unit)
 @Composable
 fun MainScreenPreview()
 {
+
+    MainScreen {
+
+    }
 }
