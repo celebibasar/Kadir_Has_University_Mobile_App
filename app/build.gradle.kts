@@ -51,7 +51,6 @@ android {
 
 dependencies {
 
-    implementation ("co.yml:ycharts:2.1.0")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.0")
@@ -73,5 +72,25 @@ dependencies {
     // Kotlin
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+
+    val koin_android_version = "3.4.0"
+    val koin_android_compose_version = "3.4.4"
+    val retrofit_version = "2.9.0"
+
+    // Koin
+    implementation ("io.insert-koin:koin-android:$koin_android_version")
+    implementation ("io.insert-koin:koin-androidx-compose:$koin_android_compose_version")
+
+    // Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
+    // System Ui Controller
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+
+    implementation ("androidx.compose.material:material-icons-extended:1.4.3")
 
 }

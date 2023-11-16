@@ -18,13 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.basarcelebi.khas_app.screens.WeatherScreen
 
 enum class KhasScreen(@StringRes val title: Int) {
     Start(title = R.string.app_name),
+    Weather(title = R.string.weather),
     Entree(title = R.string.hello_blank_fragment),
     SideDish(title = R.string.back_button),
     Accompaniment(title = R.string.app_name),
@@ -85,21 +89,22 @@ fun KhasApp(navController: NavHostController = rememberNavController()) {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = KhasScreen.Start.name) {
-                MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Entree.name)})
+                MainScreen(navController = navController,onNextButtonClicked ={navController.navigate(KhasScreen.Weather.name)})
             }
-            composable(route = KhasScreen.Entree.name) {
-                val context = LocalContext.current
-                MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.SideDish.name)})
+            composable(route = "weather/318251/Istanbul/Türkiye"){
+                WeatherScreen(navController = navController,
+                    locationKey = "318251",
+                    locationName = "Istanbul",
+                    country = "Türkiye"
+                )
             }
             composable(route = KhasScreen.SideDish.name) {
-                MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Checkout.name)})
+                MainScreen(navController = navController,onNextButtonClicked ={navController.navigate(KhasScreen.Checkout.name)})
             }
             composable(route = KhasScreen.Checkout.name) {
-                val context = LocalContext.current
-                MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Start.name)})
+                MainScreen(navController = navController,onNextButtonClicked ={navController.navigate(KhasScreen.Start.name)})
             }
         }
     }
 
 }
-
