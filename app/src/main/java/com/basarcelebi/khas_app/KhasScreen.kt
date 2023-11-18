@@ -67,36 +67,24 @@ fun KhasApp(navController: NavHostController = rememberNavController()) {
     val currentScreen = KhasScreen.valueOf(
         backStackEntry?.destination?.route ?: KhasScreen.Start.name
     )
-
-    Scaffold(
-        topBar = {
-            KhasAppBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
-            )
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = KhasScreen.Start.name,
+    ) {
+        composable(route = KhasScreen.Start.name) {
+            MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Entree.name)})
         }
-    ) { innerPadding ->
-
-
-        NavHost(
-            navController = navController,
-            startDestination = KhasScreen.Start.name,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(route = KhasScreen.Start.name) {
-                MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Entree.name)})
-            }
-            composable(route = KhasScreen.Entree.name){
-                MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.SideDish.name)})
-            }
-            composable(route = KhasScreen.SideDish.name) {
-                MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Checkout.name)})
-            }
-            composable(route = KhasScreen.Checkout.name) {
-                MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Start.name)})
-            }
+        composable(route = KhasScreen.Entree.name){
+            MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.SideDish.name)})
+        }
+        composable(route = KhasScreen.SideDish.name) {
+            MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Checkout.name)})
+        }
+        composable(route = KhasScreen.Checkout.name) {
+            MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Start.name)})
         }
     }
+
 
 }

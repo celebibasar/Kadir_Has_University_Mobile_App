@@ -40,7 +40,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
@@ -75,18 +75,18 @@ dependencies {
 
     val koin_android_version = "3.4.0"
     val koin_android_compose_version = "3.4.4"
-    val retrofit_version = "2.9.0"
+    val retrofit_version = "2.6.0"
 
     // Koin
     implementation ("io.insert-koin:koin-android:$koin_android_version")
     implementation ("io.insert-koin:koin-androidx-compose:$koin_android_compose_version")
 
     // Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     // System Ui Controller
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
