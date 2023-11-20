@@ -2,25 +2,28 @@
 
 package com.basarcelebi.khas_app
 
+import android.content.Context
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.basarcelebi.khas_app.screens.MainScreen
+import com.basarcelebi.khas_app.screens.WeatherScreen
 
 
 enum class KhasScreen(@StringRes val title: Int) {
@@ -58,31 +61,52 @@ fun KhasAppBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KhasApp(navController: NavHostController = rememberNavController()) {
-    // Get current back stack entry
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    // Get the name of the current screen
-    val currentScreen = KhasScreen.valueOf(
-        backStackEntry?.destination?.route ?: KhasScreen.Start.name
-    )
+fun KhasApp(context: Context) {
+
+
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = KhasScreen.Start.name,
+        startDestination = "home",
     ) {
-        composable(route = KhasScreen.Start.name) {
-            MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Entree.name)})
+
+        composable("home", arguments = listOf(
+            navArgument("location_key"){
+                type = NavType.StringType
+            },
+            navArgument("name"){
+                type = NavType.StringType
+            },
+            navArgument("country"){
+                type = NavType.StringType
+            }
+        )){
+            MainScreen(context=context,navController = navController,
+                locationKey = it.arguments?.getString("location_key") ?:"318251",
+                locationName = it.arguments?.getString("name") ?:"Istanbul",
+                country = it.arguments?.getString("country") ?:"Türkiye")
         }
-        composable(route = KhasScreen.Entree.name){
-            MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.SideDish.name)})
+        composable("weather/{location_key}/{name}/{country}", arguments = listOf(
+            navArgument("location_key"){
+                type = NavType.StringType
+            },
+            navArgument("name"){
+                type = NavType.StringType
+            },
+            navArgument("country"){
+                type = NavType.StringType
+            }
+        )){
+            WeatherScreen(navController = navController,
+                locationKey = it.arguments?.getString("location_key") ?:"318251",
+                locationName = it.arguments?.getString("name") ?:"Istanbul",
+                country = it.arguments?.getString("country") ?:"Türkiye"
+            )
         }
         composable(route = KhasScreen.SideDish.name) {
-            MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Checkout.name)})
         }
         composable(route = KhasScreen.Checkout.name) {
-            MainScreen(onNextButtonClicked ={navController.navigate(KhasScreen.Start.name)})
         }
     }
 

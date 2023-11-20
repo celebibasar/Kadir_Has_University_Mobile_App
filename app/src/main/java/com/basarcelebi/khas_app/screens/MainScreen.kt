@@ -1,16 +1,17 @@
-package com.basarcelebi.khas_app
+package com.basarcelebi.khas_app.screens
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,19 +22,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,16 +50,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.basarcelebi.khas_app.R
 import com.basarcelebi.khas_app.data.SubjectData
+import com.basarcelebi.khas_app.model.BaseModel
+import com.basarcelebi.khas_app.ui.theme.russuFont
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController = rememberNavController(),onNextButtonClicked: () -> Unit)
+fun MainScreen(context: Context,
+               navController: NavController = rememberNavController(),
+               locationKey: String="318251",
+               locationName: String="Istanbul",
+               country: String="Türkiye",
+               viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel())
 {
-    val context = LocalContext.current
-    val openUrlLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
+    val hourlyForecasts by viewModel.hourlyForecast.collectAsState()
 
+    LaunchedEffect(Unit){
+        viewModel.getHourlyForecast(locationKey)
+    }
+    val openUrlLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
     Column(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier
             .fillMaxWidth()
@@ -93,7 +115,7 @@ fun MainScreen(navController: NavController = rememberNavController(),onNextButt
             .fillMaxWidth()
             .padding(10.dp)
             .size(75.dp)) {
-            Card(modifier = Modifier.fillMaxWidth(), onClick = onNextButtonClicked) {
+            Card(modifier = Modifier.fillMaxWidth()) {
                 Row{
                     Column(modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
@@ -162,7 +184,7 @@ fun MainScreen(navController: NavController = rememberNavController(),onNextButt
                         .fillMaxWidth()
                         .height(32.dp)
                         .padding(start = 10.dp, end = 10.dp)
-                        ,onClick = onNextButtonClicked
+
                     ) {
 
                         Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
@@ -218,63 +240,81 @@ fun MainScreen(navController: NavController = rememberNavController(),onNextButt
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(256.dp)
-                    .clickable { onNextButtonClicked() }
+                    .clickable { navController.navigate("weather/318251/Istanbul/Türkiye") }
                     .clip(RoundedCornerShape(20.dp))
                     .padding(3.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .size(96.dp)
-                            .padding(16.dp)
-                            .background(Color.Transparent),
-                        painter = painterResource(id = R.drawable.parcali_bulutlu),
-                        contentDescription = null
-                    )
+                AnimatedVisibility(visible = hourlyForecasts is BaseModel.Success) {
+                    val data = hourlyForecasts as BaseModel.Success
+                    val temp = data.data.first().temperature
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+                        Text(text = "${temp.value}°", fontWeight = FontWeight.Bold, fontSize = 80.sp, color = Color.White, fontFamily = russuFont)
+                    }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                }
+                AnimatedVisibility(visible = hourlyForecasts is BaseModel.Loading) {
+                    Loading()
 
-                    Text(
-                        text = "18.2°",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Hourly Forecasts:", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.White)
+                Spacer(modifier = Modifier.height(10.dp))
+                AnimatedVisibility(visible = hourlyForecasts is BaseModel.Success) {
+                    val data = hourlyForecasts as BaseModel.Success
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)){
+                        items(data.data){forecast->
+                            Column(modifier = Modifier
+                                .size(90.dp, 120.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(MaterialTheme.colorScheme.secondary),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(text = SimpleDateFormat("H a").format(Date(forecast.epochDateTime*1000)), color = Color.Gray)
+                                Spacer(modifier = Modifier.height(2.dp))
+                                AsyncImage(modifier = Modifier.size(70.dp),
+                                    model = ImageRequest.Builder(LocalContext.current).data("https://developer.accuweather.com/sites/default/files/${forecast.weatherIcon.fixIcon()}-s.png").build(),
+                                    contentScale = ContentScale.Fit,
+                                    contentDescription = null)
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(text = forecast.temperature.value.toString()+"°", color = Color.White)
+                            }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    }
 
-                    Text(
-                        text = "Istanbul",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
-                    )
+                }
+                AnimatedVisibility(visible = hourlyForecasts is BaseModel.Loading) {
+                    Loading()
+
                 }
             }
-                   /* LazyRow(content = )*/ /*---- TODO -----*/
         }
     }
 }
 
 
 
+fun Int.fixIcon():String{
+    return if(this>9){
+        toString()
+    }else {
+        "0${this}"
+    }
+}
 
+@Composable
+fun Loading() {
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+        CircularProgressIndicator(color = Color.White)
+    }
 
-
-
-
+}
 
 @Preview
 @Composable
 fun MainScreenPreview()
 {
 
-    MainScreen {
 
-    }
 
 }
