@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-const val APIKEY = "6u8eGcuhOQmUQelLpwBqOQ51dbNyhrHe"
+const val APIKEY = "CpCVGX2KMslSYONpxMQ898UB7ncVCE0L"
 interface Api {
     @GET("locations/v1/cities/search")
     suspend fun searchLocation(

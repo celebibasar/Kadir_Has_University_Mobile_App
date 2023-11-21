@@ -247,17 +247,23 @@ fun MainScreen(context: Context,
                 AnimatedVisibility(visible = hourlyForecasts is BaseModel.Success) {
                     val data = hourlyForecasts as BaseModel.Success
                     val temp = data.data.first().temperature
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
-                        Text(text = "${temp.value}°", fontWeight = FontWeight.Bold, fontSize = 80.sp, color = Color.White, fontFamily = russuFont)
-                    }
+
+                        Column(modifier = Modifier.fillMaxWidth().padding(5.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "$locationName", fontWeight = FontWeight.Bold, fontSize = 30.sp, color = Color.White)
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(text = "${temp.value}°", fontWeight = FontWeight.Bold, fontSize = 60.sp, color = Color.White, fontFamily = russuFont)
+
+                        }
+
+
 
                 }
                 AnimatedVisibility(visible = hourlyForecasts is BaseModel.Loading) {
                     Loading()
 
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Hourly Forecasts:", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.White)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(modifier = Modifier.padding(start = 2.dp),text = "Hourly Forecasts:", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.White)
                 Spacer(modifier = Modifier.height(10.dp))
                 AnimatedVisibility(visible = hourlyForecasts is BaseModel.Success) {
                     val data = hourlyForecasts as BaseModel.Success
@@ -270,12 +276,10 @@ fun MainScreen(context: Context,
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(text = SimpleDateFormat("H a").format(Date(forecast.epochDateTime*1000)), color = Color.Gray)
-                                Spacer(modifier = Modifier.height(2.dp))
-                                AsyncImage(modifier = Modifier.size(70.dp),
+                                AsyncImage(modifier = Modifier.size(60.dp),
                                     model = ImageRequest.Builder(LocalContext.current).data("https://developer.accuweather.com/sites/default/files/${forecast.weatherIcon.fixIcon()}-s.png").build(),
                                     contentScale = ContentScale.Fit,
                                     contentDescription = null)
-                                Spacer(modifier = Modifier.height(2.dp))
                                 Text(text = forecast.temperature.value.toString()+"°", color = Color.White)
                             }
 
