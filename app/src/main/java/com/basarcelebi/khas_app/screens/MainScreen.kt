@@ -55,6 +55,8 @@ import coil.request.ImageRequest
 import com.basarcelebi.khas_app.R
 import com.basarcelebi.khas_app.data.SubjectData
 import com.basarcelebi.khas_app.model.BaseModel
+import com.basarcelebi.khas_app.ui.theme.googlesans
+import com.basarcelebi.khas_app.ui.theme.googlesansbold
 import com.basarcelebi.khas_app.ui.theme.russuFont
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -80,19 +82,9 @@ fun MainScreen(context: Context,
             .background(color = Color.Transparent)
             .size(75.dp)
             .padding(top = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
             ) {
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowLeft,
-                modifier = Modifier
-                    .size(30.dp)
-                    .clickable {
-                        navController.popBackStack()
-                    },
-                tint = Color.White,
-                contentDescription = null
-            )
-            Spacer(modifier = Modifier.width(139.dp))
 
             Image(
                 modifier = Modifier
@@ -106,16 +98,13 @@ fun MainScreen(context: Context,
                 painter = painterResource(R.drawable.khas_logo),
                 contentDescription = null
             )
-
-
-
         }
 
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
             .size(75.dp)) {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier.fillMaxWidth().clickable { navController.navigate("profile") }) {
                 Row{
                     Column(modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
@@ -126,24 +115,24 @@ fun MainScreen(context: Context,
                     }
                     Column(modifier = Modifier.padding(top=6.dp)) {
                         Row {
-                            Text(text = "Başar Çelebi", fontSize = 16.sp)
+                            Text(text = "Başar Çelebi", fontSize = 16.sp, fontFamily = googlesansbold)
 
                         }
                         Spacer(modifier = Modifier.height(3.dp))
                         Row {
-                            Text(text = "Computer Engineering", fontSize = 12.sp)
+                            Text(text = "Computer Engineering", fontSize = 12.sp, fontFamily = googlesansbold)
 
                         }
                         Spacer(modifier = Modifier.height(12.dp))
                         Row {
                             Column {
-                                Text(text = "5. Semester", fontSize = 9.sp)
+                                Text(text = "5. Semester", fontSize = 9.sp, fontFamily = googlesans)
 
                             }
                             Spacer(modifier = Modifier.weight(1f))
                             Column(modifier = Modifier.padding(end = 8.dp)) {
 
-                                Text(text = "GNO: 3,27", fontSize = 9.sp)
+                                Text(text = "GNO: 3,27", fontSize = 9.sp, fontFamily = googlesans)
 
                             }
 
@@ -173,7 +162,7 @@ fun MainScreen(context: Context,
                 .fillMaxWidth()
                 .background(Color.Transparent)
                 .padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                Text(text = "Bugünkü Ders Programın", fontSize = 18.sp)
+                Text(text = "Bugünkü Ders Programın", fontSize = 18.sp, fontFamily = googlesansbold)
 
             }
             val lazyItems = SubjectData.SubjectDatas()
@@ -196,7 +185,7 @@ fun MainScreen(context: Context,
                                     horizontalArrangement = Arrangement.Center
                                 ) {
                                     val subjectName = lazyItems[index].subjectName
-                                    Text(text = "$subjectName")
+                                    Text(text = "$subjectName", fontFamily = googlesansbold)
                                 }
 
                             }
@@ -207,7 +196,7 @@ fun MainScreen(context: Context,
                                     horizontalArrangement = Arrangement.Center
                                 ) {
                                     val subjectTime = lazyItems[index].time
-                                    Text(text = "$subjectTime")
+                                    Text(text = "$subjectTime", fontFamily = googlesansbold)
                                 }
 
                             }
@@ -233,7 +222,7 @@ fun MainScreen(context: Context,
                 .fillMaxWidth()
                 .background(Color.Transparent)
                 .padding(5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                Text(text = "Hava Durumu", fontSize = 18.sp)
+                Text(text = "Hava Durumu", fontSize = 18.sp, fontFamily = googlesansbold)
 
             }
 
@@ -249,7 +238,7 @@ fun MainScreen(context: Context,
                     val temp = data.data.first().temperature
 
                         Column(modifier = Modifier.fillMaxWidth().padding(5.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(text = "$locationName", fontWeight = FontWeight.Bold, fontSize = 30.sp, color = Color.White)
+                            Text(text = "$locationName", fontSize = 30.sp, color = Color.White, fontFamily = googlesansbold)
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(text = "${temp.value}°", fontWeight = FontWeight.Bold, fontSize = 60.sp, color = Color.White, fontFamily = russuFont)
 
@@ -263,7 +252,7 @@ fun MainScreen(context: Context,
 
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(modifier = Modifier.padding(start = 2.dp),text = "Hourly Forecasts:", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.White)
+                Text(modifier = Modifier.padding(start = 2.dp),text = "Hourly Forecasts:", fontSize = 18.sp, color = Color.White, fontFamily = googlesansbold)
                 Spacer(modifier = Modifier.height(10.dp))
                 AnimatedVisibility(visible = hourlyForecasts is BaseModel.Success) {
                     val data = hourlyForecasts as BaseModel.Success

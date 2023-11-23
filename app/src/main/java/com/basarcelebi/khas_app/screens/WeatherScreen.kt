@@ -45,6 +45,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.basarcelebi.khas_app.model.BaseModel
+import com.basarcelebi.khas_app.ui.theme.googlesans
+import com.basarcelebi.khas_app.ui.theme.googlesansbold
 import com.basarcelebi.khas_app.ui.theme.russuFont
 import java.nio.channels.spi.AbstractSelectionKey
 import java.text.SimpleDateFormat
@@ -82,8 +84,8 @@ fun WeatherScreen(
                 Text(text = locationName,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp)
-                Text(text = country, color = Color.Gray)
+                    fontSize = 22.sp, fontFamily = googlesansbold)
+                Text(text = country, color = Color.Gray, fontFamily = googlesansbold)
             }
 
         }
@@ -131,7 +133,7 @@ fun WeatherScreen(
             
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Daily Forecasts:", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.White)
+        Text(text = "Daily Forecasts:", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.White, fontFamily = googlesansbold)
         Spacer(modifier = Modifier.height(10.dp))
         AnimatedVisibility(visible = dailyForecasts is BaseModel.Success) {
             val data = dailyForecasts as BaseModel.Success

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -23,6 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.basarcelebi.khas_app.screens.MainScreen
+import com.basarcelebi.khas_app.screens.ProfileScreen
 import com.basarcelebi.khas_app.screens.WeatherScreen
 
 
@@ -104,7 +106,8 @@ fun KhasApp(context: Context) {
                 country = it.arguments?.getString("country") ?:"Türkiye"
             )
         }
-        composable(route = KhasScreen.SideDish.name) {
+        composable(route = "profile") {
+            ProfileScreen(navController = navController)
         }
         composable(route = KhasScreen.Checkout.name) {
         }

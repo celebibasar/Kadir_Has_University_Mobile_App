@@ -18,6 +18,21 @@ val russuFont = FontFamily(
         Font(R.font.russo_one)
     )
 )
+val googledisplay = FontFamily(
+    listOf(
+        Font(R.font.google_sans_display)
+    )
+)
+val googlesans = FontFamily(
+    listOf(
+        Font(R.font.google_sans)
+    )
+)
+val googlesansbold = FontFamily(
+    listOf(
+        Font(R.font.google_sans_bold)
+    )
+)
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
