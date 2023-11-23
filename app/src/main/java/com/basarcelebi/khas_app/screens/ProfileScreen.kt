@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.basarcelebi.khas_app.R
+import com.basarcelebi.khas_app.data.ProfileData
 import com.basarcelebi.khas_app.data.SemesterGradeData
 import com.basarcelebi.khas_app.data.SubjectData
 import com.basarcelebi.khas_app.ui.theme.googledisplay
@@ -111,41 +112,45 @@ fun ProfileScreen(navController: NavController = rememberNavController()) {
 
         }
         Spacer(modifier = Modifier.height(15.dp))
-        val lazyItems = SubjectData.SubjectDatas()
-        LazyColumn(modifier = Modifier.fillMaxWidth(),verticalArrangement = Arrangement.spacedBy(10.dp)){
-            items(SubjectData.SubjectDatas().size){ index ->
-                SubjectData.SubjectDatas()
+        val lazyItems = ProfileData.ProfileOptionsData()
+        LazyColumn(modifier = Modifier.fillMaxWidth(),verticalArrangement = Arrangement.spacedBy(5.dp)){
+            items(ProfileData.ProfileOptionsData().size){ index ->
+                ProfileData.ProfileOptionsData()
                 Card(modifier = Modifier
                     .fillMaxWidth()
-                    .height(32.dp)
+                    .height(64.dp)
+                    .border(4.dp, Color.DarkGray, RoundedCornerShape(10.dp))
+                    .clickable {
+                        when(index){
+                            0 -> navController.navigate("account")
+                            1 -> navController.navigate("security")
+                            2 -> navController.navigate("about")
+                            3 -> navController.navigate("login")
+                        }
+                    }
 
 
                 ) {
 
-                    Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+
 
                         Column {
-                            Row(
-                                modifier = Modifier.padding(start = 5.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                val subjectName = lazyItems[index].subjectName
-                                Text(text = "$subjectName", fontFamily = googlesansbold)
-                            }
-
+                            Icon(imageVector = lazyItems[index].icon, contentDescription = null, modifier = Modifier.padding(start = 10.dp).size(36.dp))
                         }
-                        Column(modifier = Modifier.padding(end = 12.dp)) {
-                            Row(
-                                modifier = Modifier.padding(start = 5.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                val subjectTime = lazyItems[index].time
-                                Text(text = "$subjectTime", fontFamily = googlesansbold)
-                            }
-
+                        Column(
+                            modifier = Modifier.padding(start = 5.dp),
+                            horizontalAlignment = Alignment.Start,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            val name = lazyItems[index].name
+                            Text(text = "$name", fontFamily = googlesansbold)
+                            val description = lazyItems[index].description
+                            Text(text = "$description", fontFamily = googlesans, fontSize = 12.sp)
                         }
+
+
+
 
                     }
 

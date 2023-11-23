@@ -264,12 +264,12 @@ fun MainScreen(context: Context,
                                 .background(MaterialTheme.colorScheme.secondary),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(text = SimpleDateFormat("H a").format(Date(forecast.epochDateTime*1000)), color = Color.Gray)
+                                Text(text = SimpleDateFormat("H a").format(Date(forecast.epochDateTime*1000)), color = Color.Gray, fontFamily = googlesansbold)
                                 AsyncImage(modifier = Modifier.size(60.dp),
                                     model = ImageRequest.Builder(LocalContext.current).data("https://developer.accuweather.com/sites/default/files/${forecast.weatherIcon.fixIcon()}-s.png").build(),
                                     contentScale = ContentScale.Fit,
                                     contentDescription = null)
-                                Text(text = forecast.temperature.value.toString()+"°", color = Color.White)
+                                Text(text = forecast.temperature.value.toString()+"°", color = Color.White, fontFamily = googlesansbold)
                             }
 
                         }
