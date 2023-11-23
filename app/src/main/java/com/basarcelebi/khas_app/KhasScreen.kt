@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.basarcelebi.khas_app.screens.LoginScreen
 import com.basarcelebi.khas_app.screens.MainScreen
 import com.basarcelebi.khas_app.screens.ProfileScreen
 import com.basarcelebi.khas_app.screens.WeatherScreen
@@ -70,20 +71,14 @@ fun KhasApp(context: Context) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "home",
+        startDestination = "login",
     ) {
+        composable(route = "login") {
+            LoginScreen(navController = navController)
+        }
 
-        composable("home", arguments = listOf(
-            navArgument("location_key"){
-                type = NavType.StringType
-            },
-            navArgument("name"){
-                type = NavType.StringType
-            },
-            navArgument("country"){
-                type = NavType.StringType
-            }
-        )){
+        composable("home"
+            ){
             MainScreen(context=context,navController = navController,
                 locationKey = it.arguments?.getString("location_key") ?:"318251",
                 locationName = it.arguments?.getString("name") ?:"Istanbul",
@@ -109,8 +104,7 @@ fun KhasApp(context: Context) {
         composable(route = "profile") {
             ProfileScreen(navController = navController)
         }
-        composable(route = KhasScreen.Checkout.name) {
-        }
+
     }
 
 
