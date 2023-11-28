@@ -24,8 +24,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.basarcelebi.khas_app.screens.LoginScreen
+import com.basarcelebi.khas_app.screens.LoginViewModel
 import com.basarcelebi.khas_app.screens.MainScreen
 import com.basarcelebi.khas_app.screens.ProfileScreen
+import com.basarcelebi.khas_app.screens.RegisterScreen
 import com.basarcelebi.khas_app.screens.WeatherScreen
 
 
@@ -65,7 +67,7 @@ fun KhasAppBar(
 }
 
 @Composable
-fun KhasApp(context: Context) {
+fun KhasApp(context: Context, loginViewModel: LoginViewModel) {
 
 
     val navController = rememberNavController()
@@ -74,7 +76,10 @@ fun KhasApp(context: Context) {
         startDestination = "login",
     ) {
         composable(route = "login") {
-            LoginScreen(navController = navController)
+            LoginScreen(loginViewModel = loginViewModel,navController = navController)
+        }
+        composable(route = "register") {
+            RegisterScreen(loginViewModel = loginViewModel,navController = navController)
         }
 
         composable("home"
@@ -102,7 +107,7 @@ fun KhasApp(context: Context) {
             )
         }
         composable(route = "profile") {
-            ProfileScreen(navController = navController)
+            ProfileScreen(loginViewModel = loginViewModel,navController = navController)
         }
 
     }

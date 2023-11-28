@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -38,22 +37,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.basarcelebi.khas_app.R
 import com.basarcelebi.khas_app.ui.theme.googlesansbold
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel? = null,navController: NavController = rememberNavController(),) {
+fun RegisterScreen(loginViewModel: LoginViewModel? = null, navController: NavController = rememberNavController()) {
     val openUrlLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { }
     val loginUiState = loginViewModel?.loginUiState
-    val isError = loginUiState?.loginError != null
+    val isError = loginUiState?.signUpError != null
     val context = LocalContext.current
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
         Row(modifier = Modifier
@@ -84,18 +80,18 @@ fun LoginScreen(loginViewModel: LoginViewModel? = null,navController: NavControl
         Spacer(modifier = Modifier.height(8.dp))
         if (isError){
             Text(
-                text = loginUiState?.loginError ?: "unknown error",
+                text = loginUiState?.signUpError ?: "unknown error",
                 color = Color.Red,
             )
         }
         val usernameInput = remember { mutableStateOf("") }
         OutlinedTextField(
-            value = loginUiState?.userName ?: "",
+            value = loginUiState?.userNameSignUp ?: "",
             singleLine = true,
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Person, contentDescription = null)
             },
-            onValueChange = {loginViewModel?.onUserNameChange(it)},
+            onValueChange = {loginViewModel?.onUserNameChangeSignup(it)},
             label = { Text("Student Number") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -105,8 +101,8 @@ fun LoginScreen(loginViewModel: LoginViewModel? = null,navController: NavControl
         Spacer(modifier = Modifier.height(4.dp))
         val passwordInput = remember { mutableStateOf("") }
         OutlinedTextField(
-            value = loginUiState?.password ?: "",
-            onValueChange = { loginViewModel?.onPasswordNameChange(it) },
+            value = loginUiState?.passwordSignUp ?: "",
+            onValueChange = { loginViewModel?.onPasswordChangeSignup(it) },
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Lock, contentDescription = null)
             },
@@ -118,11 +114,28 @@ fun LoginScreen(loginViewModel: LoginViewModel? = null,navController: NavControl
                 .padding(horizontal = 16.dp),
             isError = isError
         )
+        Spacer(modifier = Modifier.height(4.dp))
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            value = loginUiState?.confirmPasswordSignUp ?: "",
+            onValueChange = { loginViewModel?.onConfirmPasswordChange(it) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = null,
+                )
+            },
+            label = {
+                Text(text = "Confirm Password")
+            },
+            visualTransformation = PasswordVisualTransformation(),
+            isError = isError
+        )
         Spacer(modifier = Modifier.height(8.dp))
         Button(
-            onClick = {
-                loginViewModel?.loginUser(context)
-            },
+            onClick = { loginViewModel?.createUser(context) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
@@ -134,23 +147,16 @@ fun LoginScreen(loginViewModel: LoginViewModel? = null,navController: NavControl
 
 
     }
-
     if (loginUiState?.isLoading == true){
         CircularProgressIndicator()
     }
 
-    LaunchedEffect(key1 = loginViewModel?.hasUser){
-        if (loginViewModel?.hasUser == true){
+    LaunchedEffect(key1 = loginViewModel?.hasUser) {
+        if (loginViewModel?.hasUser == true) {
             navController.navigate("home")
+
         }
+
     }
-
-
-}
-
-@Preview
-@Composable
-fun LoginPreview() {
-    LoginScreen()
 
 }

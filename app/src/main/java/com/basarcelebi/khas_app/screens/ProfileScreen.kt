@@ -26,6 +26,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +49,7 @@ import com.basarcelebi.khas_app.ui.theme.googlesans
 import com.basarcelebi.khas_app.ui.theme.googlesansbold
 
 @Composable
-fun ProfileScreen(navController: NavController = rememberNavController()) {
+fun ProfileScreen(loginViewModel: LoginViewModel? = null,navController: NavController = rememberNavController()) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp)) {
@@ -125,7 +126,7 @@ fun ProfileScreen(navController: NavController = rememberNavController()) {
                             0 -> navController.navigate("account")
                             1 -> navController.navigate("security")
                             2 -> navController.navigate("about")
-                            3 -> navController.navigate("login")
+                            3 -> loginViewModel?.logout()
                         }
                     }
 
@@ -162,6 +163,7 @@ fun ProfileScreen(navController: NavController = rememberNavController()) {
 
         }
     }
+
 }
 
 
