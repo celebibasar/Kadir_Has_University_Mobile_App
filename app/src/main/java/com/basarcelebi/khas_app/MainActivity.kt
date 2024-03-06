@@ -6,9 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.HowToReg
@@ -26,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -80,38 +84,42 @@ fun MyBottomAppBar() {
                         popUpTo(0)
                     }
                     selected.value = Icons.Default.Home
-                }) {
+                }, modifier = Modifier.weight(1f)) {
                     Icon(
                         imageVector = Icons.Default.Home,
                         contentDescription = "Home",
-                        tint = if (selected.value == Icons.Default.Home) Color.White else Color.Gray
+                        tint = if (selected.value == Icons.Default.Home) Color.White else Color.Gray,
+                        modifier = Modifier.size(26.dp)
                     )
                 }
+
                 IconButton(onClick = {
-                    navigationController.navigate(Screens.ProfileScreen.screen){
+                    navigationController.navigate(Screens.RegisterScreen.screen){
                         popUpTo(0)
                     }
-                    selected.value = Icons.Default.Person
-                }) {
+                    selected.value = Icons.Default.HowToReg
+                }, modifier = Modifier.weight(1f)) {
                     Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = "Profile",
-                        tint = if (selected.value == Icons.Default.Person) Color.White else Color.Gray
+                        imageVector = Icons.Default.HowToReg,
+                        contentDescription = "Register",
+                        tint = if (selected.value == Icons.Default.HowToReg) Color.White else Color.Gray,
+                        modifier = Modifier.size(26.dp)
                     )
                 }
 
                 Box(modifier = Modifier
-                    .weight(1f)
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .weight(1f),
                     contentAlignment = androidx.compose.ui.Alignment.Center) {
                     FloatingActionButton(onClick = { navigationController.navigate(Screens.RegisterScreen.screen){
                         popUpTo(0)
                     }
-                        selected.value = Icons.Default.HowToReg }) {
+                        selected.value = Icons.Default.Add }) {
                         Icon(
-                            imageVector = Icons.Default.HowToReg,
+                            imageVector = Icons.Default.Add,
                             contentDescription = "Register",
-                            tint = GreenJC
+                            tint = GreenJC,
+                            modifier = Modifier.size(26.dp)
                         )
                         
                     }
@@ -121,25 +129,28 @@ fun MyBottomAppBar() {
                         popUpTo(0)
                     }
                     selected.value = Icons.Default.Cloud
-                }) {
+                }, modifier = Modifier.weight(1f)) {
                     Icon(
                         imageVector = Icons.Default.Cloud,
                         contentDescription = "Weather",
-                        tint = if (selected.value == Icons.Default.Cloud) Color.White else Color.Gray
+                        tint = if (selected.value == Icons.Default.Cloud) Color.White else Color.Gray,
+                        modifier = Modifier.size(26.dp)
                     )
                 }
                 IconButton(onClick = {
-                    navigationController.navigate(Screens.RegisterScreen.screen){
+                    navigationController.navigate(Screens.ProfileScreen.screen){
                         popUpTo(0)
                     }
-                    selected.value = Icons.Default.HowToReg
-                }) {
+                    selected.value = Icons.Default.Person
+                }, modifier = Modifier.weight(1f)) {
                     Icon(
-                        imageVector = Icons.Default.HowToReg,
-                        contentDescription = "Register",
-                        tint = if (selected.value == Icons.Default.HowToReg) Color.White else Color.Gray
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Profile",
+                        tint = if (selected.value == Icons.Default.Person) Color.White else Color.Gray,
+                        modifier = Modifier.size(26.dp)
                     )
                 }
+
 
             }
         }
@@ -159,6 +170,12 @@ fun MyBottomAppBar() {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun MyBottomAppBarPreview() {
+    MyBottomAppBar()
 }
 
 
