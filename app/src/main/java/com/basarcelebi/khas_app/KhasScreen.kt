@@ -71,9 +71,14 @@ fun KhasApp(context: Context, loginViewModel: LoginViewModel) {
 
 
     val navController = rememberNavController()
+    val startDestination = if (loginViewModel?.hasUser == true){
+        "home"
+    }else{
+        "login"
+    }
     NavHost(
         navController = navController,
-        startDestination = "login",
+        startDestination = startDestination
     ) {
         composable(route = "login") {
             LoginScreen(loginViewModel = loginViewModel,navController = navController)

@@ -88,7 +88,6 @@ fun LoginScreen(loginViewModel: LoginViewModel? = null,navController: NavControl
                 color = Color.Red,
             )
         }
-        val usernameInput = remember { mutableStateOf("") }
         OutlinedTextField(
             value = loginUiState?.userName ?: "",
             singleLine = true,
@@ -103,7 +102,6 @@ fun LoginScreen(loginViewModel: LoginViewModel? = null,navController: NavControl
             isError = isError
         )
         Spacer(modifier = Modifier.height(4.dp))
-        val passwordInput = remember { mutableStateOf("") }
         OutlinedTextField(
             value = loginUiState?.password ?: "",
             onValueChange = { loginViewModel?.onPasswordNameChange(it) },

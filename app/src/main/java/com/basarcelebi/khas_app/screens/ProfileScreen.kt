@@ -50,6 +50,7 @@ import com.basarcelebi.khas_app.ui.theme.googlesansbold
 
 @Composable
 fun ProfileScreen(loginViewModel: LoginViewModel? = null,navController: NavController = rememberNavController()) {
+    val loginUiState = loginViewModel?.loginUiState
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp)) {
@@ -122,12 +123,16 @@ fun ProfileScreen(loginViewModel: LoginViewModel? = null,navController: NavContr
                     .height(64.dp)
                     .border(4.dp, Color.DarkGray, RoundedCornerShape(10.dp))
                     .clickable {
-                        when(index){
+                        when (index) {
                             0 -> navController.navigate("account")
                             1 -> navController.navigate("security")
                             2 -> navController.navigate("about")
-                            3 -> loginViewModel?.logout()
+                            3 -> {
+                                loginViewModel?.logout()
+                                navController.navigate("login") // Navigate to the login page
+                            }
                         }
+
                     }
 
 

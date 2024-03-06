@@ -72,7 +72,7 @@ dependencies {
     val koin_android_version = "3.4.0"
     val koin_android_compose_version = "3.4.4"
     val retrofit_version = "2.9.0"
-    val nav_version = "2.6.0"
+    val nav_version = "2.7.6"
 
     // Koin
     implementation ("io.insert-koin:koin-android:$koin_android_version")
