@@ -3,6 +3,13 @@ package com.basarcelebi.khas_app.screens
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.dp
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -19,18 +26,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -49,7 +52,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.basarcelebi.khas_app.R
@@ -64,13 +66,15 @@ import java.util.Date
 
 @Composable
 fun MainScreen(context: Context,
-               navController: NavController = rememberNavController(),
+               navController: NavController,
                locationKey: String="318251",
                locationName: String="Istanbul",
                country: String="Türkiye",
                viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel())
 {
     val hourlyForecasts by viewModel.hourlyForecast.collectAsState()
+    val gpaData = listOf(3.5f, 3.8f, 3.9f, 4.0f, 3.7f)
+    val semesterLabels = listOf("Fall 2021", "Spring 2022", "Fall 2022", "Spring 2023", "Fall 2023")
 
     LaunchedEffect(Unit){
         viewModel.getHourlyForecast(locationKey)
@@ -104,7 +108,7 @@ fun MainScreen(context: Context,
             .fillMaxWidth()
             .padding(10.dp)
             .size(75.dp)) {
-            Card(modifier = Modifier.fillMaxWidth().clickable { navController.navigate("profile") }) {
+            Card(modifier = Modifier.fillMaxWidth().clickable { navController.navigate(Screens.ProfileScreen.screen) }) {
                 Row{
                     Column(modifier = Modifier
                         .clip(RoundedCornerShape(10.dp))
@@ -229,18 +233,25 @@ fun MainScreen(context: Context,
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { navController.navigate("weather/318251/Istanbul/Türkiye") }
+                    .clickable { navController.navigate(Screens.WeatherScreen.screen) }
                     .clip(RoundedCornerShape(20.dp))
                     .padding(3.dp)
             ) {
                 AnimatedVisibility(visible = hourlyForecasts is BaseModel.Success) {
                     val data = hourlyForecasts as BaseModel.Success
-                    val temp = data.data.first().temperature
+                    val temp = data.data.firstOrNull()?.temperature
 
-                        Column(modifier = Modifier.fillMaxWidth().padding(5.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+
+                    Column(modifier = Modifier.fillMaxWidth().padding(5.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(text = "$locationName", fontSize = 30.sp, color = Color.White, fontFamily = googlesansbold)
                             Spacer(modifier = Modifier.height(10.dp))
-                            Text(text = "${temp.value}°", fontWeight = FontWeight.Bold, fontSize = 60.sp, color = Color.White, fontFamily = russuFont)
+                        Text(
+                            text = "${temp?.value}°",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 60.sp,
+                            color = Color.White,
+                            fontFamily = russuFont
+                        )
 
                         }
 
@@ -282,6 +293,12 @@ fun MainScreen(context: Context,
                 }
             }
         }
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent)
+            .padding(5.dp)){
+            GPAGraph(gpaData, semesterLabels)
+        }
     }
 }
 
@@ -301,6 +318,51 @@ fun Loading() {
         CircularProgressIndicator(color = Color.White)
     }
 
+}
+
+
+@Composable
+fun GPAGraph(gpaData: List<Float>, semesterLabels: List<String>) {
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+        // Calculate the maximum GPA value
+        val maxGpa = 4f
+
+        // Calculate the height of each bar
+        val barHeight = size.height / maxGpa
+
+        // Draw the bars
+        gpaData.forEachIndexed { index, gpa ->
+            val x = (index + 1) * (size.width / (gpaData.size + 1))
+            val y = size.height - (gpa * barHeight)
+            drawLine(
+                color = Color.Blue,
+                start = Offset(x, size.height),
+                end = Offset(x, y),
+                strokeWidth = 5.dp.toPx(),
+                cap = StrokeCap.Round
+            )
+        }
+
+        // Draw the semester labels
+        semesterLabels.forEachIndexed { index, label ->
+            val x = (index + 1) * (size.width / (gpaData.size + 1))
+            val y = size.height + 10.dp.toPx()
+            drawContext.canvas.nativeCanvas.drawText(
+                label,
+                x,
+                y,
+                android.graphics.Paint().apply {
+                    textSize = 12.sp.toPx()
+                    color = android.graphics.Color.BLACK
+                    textAlign = android.graphics.Paint.Align.CENTER
+                }
+            )
+        }
+    }
 }
 
 @Preview

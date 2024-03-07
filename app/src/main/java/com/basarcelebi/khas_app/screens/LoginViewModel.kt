@@ -9,7 +9,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.basarcelebi.khas_app.MainActivity
 import com.basarcelebi.khas_app.repositories.AuthRepository
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -17,6 +20,8 @@ class LoginViewModel(
 
 ) : ViewModel() {
     val currentUser = repository.currentUser
+
+
 
 
     val hasUser: Boolean
@@ -27,6 +32,13 @@ class LoginViewModel(
 
     fun onUserNameChange(userName: String) {
         loginUiState = loginUiState.copy(userName = userName)
+    }
+    fun navigateToHome(navController: NavController) {
+        if (loginUiState.isSuccessLogin)
+        {
+            navController.navigate(Screens.MainScreen.screen)
+        }
+
     }
 
     fun onPasswordNameChange(password: String) {
@@ -55,7 +67,7 @@ class LoginViewModel(
                 loginUiState.confirmPasswordSignUp.isNotBlank()
 
 
-    fun createUser(context: Context) = viewModelScope.launch {
+    fun createUser(context: Context, navController: NavController) = viewModelScope.launch {
         try {
             if (!validateSignupForm()) {
                 throw IllegalArgumentException("email and password can not be empty")
@@ -67,26 +79,27 @@ class LoginViewModel(
                 throw IllegalArgumentException(
                     "Password do not match"
                 )
+
             }
             loginUiState = loginUiState.copy(signUpError = null)
             repository.createUser(
                 loginUiState.userNameSignUp,
                 loginUiState.passwordSignUp
             ) { isSuccessful ->
-                if (isSuccessful) {
+                loginUiState = if (isSuccessful) {
                     Toast.makeText(
                         context,
-                        "success Login",
+                        "Success Register",
                         Toast.LENGTH_SHORT
                     ).show()
-                    loginUiState = loginUiState.copy(isSuccessLogin = true)
+                    loginUiState.copy(isSuccessLogin = true)
                 } else {
                     Toast.makeText(
                         context,
-                        "Failed Login",
+                        "Failed Register",
                         Toast.LENGTH_SHORT
                     ).show()
-                    loginUiState = loginUiState.copy(isSuccessLogin = false)
+                    loginUiState.copy(isSuccessLogin = false)
                 }
 
             }
@@ -102,7 +115,7 @@ class LoginViewModel(
 
     }
 
-    fun loginUser(context: Context) = viewModelScope.launch {
+    fun loginUser(context: Context, navController: NavController, onComplete: (Boolean) -> Unit) = viewModelScope.launch {
         try {
             if (!validateLoginForm()) {
                 throw IllegalArgumentException("email and password can not be empty")
@@ -113,21 +126,25 @@ class LoginViewModel(
                 loginUiState.userName,
                 loginUiState.password
             ) { isSuccessful ->
-                if (isSuccessful) {
+                loginUiState = if (isSuccessful) {
                     Toast.makeText(
                         context,
-                        "success Login",
+                        "Success Login",
                         Toast.LENGTH_SHORT
                     ).show()
-                    loginUiState = loginUiState.copy(isSuccessLogin = true)
+                    loginUiState.copy(isSuccessLogin = true)
+
+
+
                 } else {
                     Toast.makeText(
                         context,
                         "Failed Login",
                         Toast.LENGTH_SHORT
                     ).show()
-                    loginUiState = loginUiState.copy(isSuccessLogin = false)
+                    loginUiState.copy(isSuccessLogin = false)
                 }
+                onComplete(isSuccessful)
 
             }
 
@@ -141,7 +158,8 @@ class LoginViewModel(
 
 
     }
-    fun logout() = viewModelScope.launch {
+
+    fun logout() {
         repository.logout()
     }
 

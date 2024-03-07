@@ -10,7 +10,8 @@ import kotlinx.coroutines.withContext
 class AuthRepository {
    val currentUser:FirebaseUser? = Firebase.auth.currentUser
 
-    fun hasUser():Boolean = Firebase.auth.currentUser != null
+    fun hasUser(): Boolean = currentUser != null
+
 
     fun getUserId():String = Firebase.auth.currentUser?.uid.orEmpty()
 
@@ -44,7 +45,7 @@ class AuthRepository {
                 }
             }.await()
     }
-    suspend fun logout() = withContext(Dispatchers.IO){
+     fun logout() {
         Firebase.auth.signOut()
     }
 

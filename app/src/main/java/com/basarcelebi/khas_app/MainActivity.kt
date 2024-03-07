@@ -1,12 +1,10 @@
 package com.basarcelebi.khas_app
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,7 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.HowToReg
+import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,10 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.basarcelebi.khas_app.repositories.AuthRepository
+import com.basarcelebi.khas_app.screens.LoginScreen
 import com.basarcelebi.khas_app.screens.LoginViewModel
 import com.basarcelebi.khas_app.screens.MainScreen
 import com.basarcelebi.khas_app.screens.ProfileScreen
@@ -46,11 +45,9 @@ import com.basarcelebi.khas_app.ui.theme.Khas_appTheme
 
 class MainActivity : ComponentActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val loginViewModel = viewModel(modelClass = LoginViewModel::class.java)
             Khas_appTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -69,6 +66,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyBottomAppBar() {
     val navigationController = rememberNavController()
+    val repository: AuthRepository = AuthRepository()
     val context = LocalContext.current.applicationContext
     val selected = remember {
         mutableStateOf(Icons.Default.Home)
@@ -80,9 +78,20 @@ fun MyBottomAppBar() {
                 contentColor = Color.White
             ) {
                 IconButton(onClick = {
-                    navigationController.navigate(Screens.MainScreen.screen){
-                        popUpTo(0)
+                    if (repository.hasUser())
+                    {
+                        navigationController.navigate(Screens.MainScreen.screen){
+                            popUpTo(0)
+                        }
+
+                    }else
+                    {
+                        navigationController.navigate(Screens.LoginScreen.screen){
+                            popUpTo(0)
+                        }
+
                     }
+
                     selected.value = Icons.Default.Home
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
@@ -94,15 +103,26 @@ fun MyBottomAppBar() {
                 }
 
                 IconButton(onClick = {
-                    navigationController.navigate(Screens.RegisterScreen.screen){
-                        popUpTo(0)
+                    if (repository.hasUser())
+                    {
+                        navigationController.navigate(Screens.LoginScreen.screen){
+                            popUpTo(0)
+                        }
+
+                    }else
+                    {
+                        navigationController.navigate(Screens.LoginScreen.screen){
+                            popUpTo(0)
+                        }
+
                     }
-                    selected.value = Icons.Default.HowToReg
+
+                    selected.value = Icons.Default.Login
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
-                        imageVector = Icons.Default.HowToReg,
-                        contentDescription = "Register",
-                        tint = if (selected.value == Icons.Default.HowToReg) Color.White else Color.Gray,
+                        imageVector = Icons.Default.Login,
+                        contentDescription = "Login",
+                        tint = if (selected.value == Icons.Default.Login) Color.White else Color.Gray,
                         modifier = Modifier.size(26.dp)
                     )
                 }
@@ -111,9 +131,21 @@ fun MyBottomAppBar() {
                     .padding(16.dp)
                     .weight(1f),
                     contentAlignment = androidx.compose.ui.Alignment.Center) {
-                    FloatingActionButton(onClick = { navigationController.navigate(Screens.RegisterScreen.screen){
-                        popUpTo(0)
-                    }
+                    FloatingActionButton(onClick = {
+                        if (repository.hasUser())
+                        {
+                            navigationController.navigate(Screens.MainScreen.screen){
+                                popUpTo(0)
+                            }
+
+                        }else
+                        {
+                            navigationController.navigate(Screens.RegisterScreen.screen){
+                                popUpTo(0)
+                            }
+
+                        }
+
                         selected.value = Icons.Default.Add }) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -125,9 +157,20 @@ fun MyBottomAppBar() {
                     }
                 }
                 IconButton(onClick = {
-                    navigationController.navigate(Screens.WeatherScreen.screen){
-                        popUpTo(0)
+                    if (repository.hasUser())
+                    {
+                        navigationController.navigate(Screens.WeatherScreen.screen){
+                            popUpTo(0)
+                        }
+
+                    }else
+                    {
+                        navigationController.navigate(Screens.LoginScreen.screen){
+                            popUpTo(0)
+                        }
+
                     }
+
                     selected.value = Icons.Default.Cloud
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
@@ -138,9 +181,20 @@ fun MyBottomAppBar() {
                     )
                 }
                 IconButton(onClick = {
-                    navigationController.navigate(Screens.ProfileScreen.screen){
-                        popUpTo(0)
+                    if (repository.hasUser())
+                    {
+                        navigationController.navigate(Screens.ProfileScreen.screen){
+                            popUpTo(0)
+                        }
+
+                    }else
+                    {
+                        navigationController.navigate(Screens.LoginScreen.screen){
+                            popUpTo(0)
+                        }
+
                     }
+
                     selected.value = Icons.Default.Person
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
@@ -157,16 +211,41 @@ fun MyBottomAppBar() {
     ) { paddingValues ->
         NavHost(navController = navigationController, startDestination = Screens.MainScreen.screen, modifier = Modifier.padding(paddingValues)) {
             composable(Screens.MainScreen.screen) {
-                MainScreen(context = context)
+                if (repository.hasUser())
+                {
+                    MainScreen(context = context, navController = navigationController)
+                }else{
+                    LoginScreen(loginViewModel = LoginViewModel(),navController = navigationController)
+                }
+
             }
             composable(Screens.ProfileScreen.screen) {
-                ProfileScreen()
+                if (repository.hasUser())
+                {
+                    ProfileScreen(navController = navigationController)
+                }else
+                {
+                    LoginScreen(loginViewModel = LoginViewModel(),navController = navigationController)
+                }
+
+            }
+            composable(Screens.LoginScreen.screen) {
+                LoginScreen(loginViewModel = LoginViewModel(),navController = navigationController)
             }
             composable(Screens.WeatherScreen.screen) {
-                RegisterScreen()
+                if (repository.hasUser())
+                {
+                    WeatherScreen(navController = navigationController,locationKey ="318251",
+                    locationName ="Istanbul",
+                    country ="Türkiye")
+                }else
+                {
+                    LoginScreen(loginViewModel = LoginViewModel(),navController = navigationController)
+                }
+
             }
             composable(Screens.RegisterScreen.screen) {
-                RegisterScreen()
+                RegisterScreen(loginViewModel = LoginViewModel(),navController = navigationController)
             }
         }
     }

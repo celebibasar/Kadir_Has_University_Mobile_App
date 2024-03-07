@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "373602985559",
-    "project_id": "login-register-firebase-3252a",
-    "storage_bucket": "login-register-firebase-3252a.appspot.com"
+    "project_number": "462718170680",
+    "project_id": "khasapp-cfd23",
+    "storage_bucket": "khasapp-cfd23.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:373602985559:android:7c47c56af4599f42b12512",
+        "mobilesdk_app_id": "1:462718170680:android:1e14c1b5b793ff297dd8cd",
         "android_client_info": {
           "package_name": "com.basarcelebi.khas_app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "373602985559-e4u4d6pbhm5b1stdj7pmh8gj6rlnoc76.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.basarcelebi.khas_app",
-            "certificate_hash": "88c3900ee19ba45a803d504d0bc2d692303e5fed"
-          }
-        },
-        {
-          "client_id": "373602985559-i4bj9so962j26grncbk4jf5823a5f6es.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB1fxFy2W1z_jOsRG9T1l68IA3zYmRS79c"
+          "current_key": "AIzaSyBtzYAVwecOsTF4C85JBtEFQER8mmAiRY0"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "373602985559-i4bj9so962j26grncbk4jf5823a5f6es.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

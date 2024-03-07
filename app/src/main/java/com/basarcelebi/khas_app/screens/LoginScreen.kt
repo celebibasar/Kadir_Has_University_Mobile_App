@@ -29,8 +29,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -119,7 +121,12 @@ fun LoginScreen(loginViewModel: LoginViewModel? = null,navController: NavControl
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = {
-                loginViewModel?.loginUser(context)
+                loginViewModel?.loginUser(context,navController) { isSuccessful ->
+                    if (isSuccessful) {
+                        navController.navigate(Screens.MainScreen.screen)
+                    }
+                }
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,7 +146,7 @@ fun LoginScreen(loginViewModel: LoginViewModel? = null,navController: NavControl
 
     LaunchedEffect(key1 = loginViewModel?.hasUser){
         if (loginViewModel?.hasUser == true){
-            navController.navigate("home")
+            navController.navigate(Screens.MainScreen.screen)
         }
     }
 

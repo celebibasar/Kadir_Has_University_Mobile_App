@@ -135,7 +135,7 @@ fun RegisterScreen(loginViewModel: LoginViewModel? = null, navController: NavCon
         )
         Spacer(modifier = Modifier.height(8.dp))
         Button(
-            onClick = { loginViewModel?.createUser(context) },
+            onClick = { loginViewModel?.createUser(context, navController) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
